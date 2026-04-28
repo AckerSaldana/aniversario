@@ -1,9 +1,25 @@
 import { useRef } from 'react';
 import { useChapterScroll } from '../hooks/useChapterScroll';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { SplitTextLine } from '../components/SplitTextLine';
 import { copy } from '../data/copy';
 import { photos } from '../data/photos';
+import { Polaroid3D } from '../components/Polaroid3D';
 import styles from '../styles/chapters/chapter-03.module.css';
+
+const TILE_CONFIG: {
+  rotate: number;
+  width: number;
+  className: string;
+  caption: string;
+}[] = [
+  { rotate: -6, width: 230, className: 'tile0', caption: 'EscapeRoom' },
+  { rotate: 4, width: 210, className: 'tile1', caption: 'Quebec Beis' },
+  { rotate: -3, width: 245, className: 'tile2', caption: 'Sultanes' },
+  { rotate: 5, width: 220, className: 'tile3', caption: 'DaleMixx' },
+  { rotate: -2, width: 255, className: 'tile4', caption: 'Sea at Hull' },
+  { rotate: 3, width: 215, className: 'tile5', caption: 'SixFlags' },
+];
 
 export function Chapter03Mosaico() {
   const ref = useRef<HTMLElement>(null);
@@ -15,18 +31,33 @@ export function Chapter03Mosaico() {
       ref={ref}
       className={styles.section}
       data-chapter="3"
-      style={{ height: lowFi ? '100vh' : '160vh' }}
+      style={{ height: lowFi ? '100vh' : '200vh' }}
     >
       <div className={styles.stickyStage}>
         <div className={styles.frame} data-chapter-content>
-          <ul className={styles.grid}>
-            {photos.mosaico.map((p) => (
-              <li key={p.src} className={styles.tile}>
-                <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
-              </li>
-            ))}
+          <ul className={styles.scatter}>
+            {photos.mosaico.map((p, i) => {
+              const cfg = TILE_CONFIG[i] ?? TILE_CONFIG[0];
+              return (
+                <li
+                  key={p.src}
+                  className={`${styles.tile} ${styles[cfg.className]}`}
+                >
+                  <Polaroid3D
+                    src={p.src}
+                    alt={p.alt}
+                    video={p.video}
+                    caption={cfg.caption}
+                    rotate={cfg.rotate}
+                    width={cfg.width}
+                  />
+                </li>
+              );
+            })}
           </ul>
-          <p className={styles.line}>{copy.mosaico.line}</p>
+          <SplitTextLine as="p" type="words" className={styles.line}>
+            {copy.mosaico.line}
+          </SplitTextLine>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { SplitTextLine } from '../components/SplitTextLine';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { copy } from '../data/copy';
 import shared from '../styles/chapters/chapter-shared.module.css';
+import styles from '../styles/chapters/chapter-05.module.css';
 
 export function Chapter05Presente() {
   const ref = useRef<HTMLElement>(null);
@@ -18,13 +19,15 @@ export function Chapter05Presente() {
       style={{ height: lowFi ? '100vh' : '220vh' }}
     >
       <div className={shared.stickyStage}>
-        <div className={`${shared.frame} ${shared.center}`} data-chapter-content>
-          <SplitTextLine
-            as="p"
-            type="lines"
-            className={`${shared.body} ${shared.bodyLg}`}
-          >
-            {copy.presente.lines.join('\n')}
+        <div className={styles.crescendo} data-chapter-content>
+          <SplitTextLine as="p" type="words" className={`${styles.line} ${styles.line0}`}>
+            {copy.presente.lines[0]}
+          </SplitTextLine>
+          <SplitTextLine as="p" type="words" className={`${styles.line} ${styles.line1}`}>
+            {copy.presente.lines[1]}
+          </SplitTextLine>
+          <SplitTextLine as="p" type="words" className={`${styles.line} ${styles.line2}`}>
+            {copy.presente.lines[2]}
           </SplitTextLine>
         </div>
       </div>

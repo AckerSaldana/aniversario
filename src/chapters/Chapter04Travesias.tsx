@@ -4,6 +4,7 @@ import { SplitTextLine } from '../components/SplitTextLine';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { copy } from '../data/copy';
 import shared from '../styles/chapters/chapter-shared.module.css';
+import styles from '../styles/chapters/chapter-04.module.css';
 
 export function Chapter04Travesias() {
   const ref = useRef<HTMLElement>(null);
@@ -18,18 +19,20 @@ export function Chapter04Travesias() {
       style={{ height: lowFi ? '100vh' : '380vh' }}
     >
       <div className={shared.stickyStage}>
-        <div className={shared.frame} data-chapter-content>
-          <span className={shared.place}>{copy.quebec.place}</span>
-          <SplitTextLine as="p" type="lines" className={`${shared.body} ${shared.bodySm}`}>
-            {copy.quebec.lines.join('\n')}
-          </SplitTextLine>
+        <div className={styles.frame} data-chapter-content>
+          <div className={styles.block}>
+            <span className={shared.place}>{copy.quebec.place}</span>
+            <SplitTextLine as="p" type="lines" className={shared.body}>
+              {copy.quebec.lines.join('\n')}
+            </SplitTextLine>
+          </div>
 
-          <span className={shared.place} style={{ marginTop: 'var(--space-3)' }}>
-            {copy.hull.place}
-          </span>
-          <SplitTextLine as="p" type="lines" className={`${shared.body} ${shared.bodySm}`}>
-            {copy.hull.lines.join('\n')}
-          </SplitTextLine>
+          <div className={styles.block}>
+            <span className={shared.place}>{copy.hull.place}</span>
+            <SplitTextLine as="p" type="lines" className={shared.body}>
+              {copy.hull.lines.join('\n')}
+            </SplitTextLine>
+          </div>
         </div>
       </div>
     </section>

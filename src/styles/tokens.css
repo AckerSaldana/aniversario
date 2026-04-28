@@ -42,6 +42,7 @@
   /* tipografía */
   --font-display: 'chloe', 'Fraunces Variable', Georgia, serif;
   --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-hand: 'Caveat Variable', 'Caveat', 'Comic Sans MS', cursive;
 
   --step--1: clamp(0.875rem, 0.85rem + 0.15vw, 1rem);
   --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);

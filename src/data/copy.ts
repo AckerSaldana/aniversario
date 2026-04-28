@@ -12,16 +12,16 @@ export const copy = {
       'Vichy no era de ninguno de los dos.',
       'Por eso fue perfecta.',
       'Dos extranjeros encontrándose en una ciudad que tampoco les pertenecía,',
-      'hablando de cosas pequeñas bajo árboles que llevaban siglos esperándonos.',
+      'hablando de cosas pequeñas en las calles que llevaban siglos esperándonos.',
     ],
   },
 
-  marco: {
-    place: 'MARCO · Monterrey',
+  palnorte: {
+    place: 'Pal Norte · Monterrey · 2024',
     lines: [
-      'En el MARCO aprendimos a estar callados juntos.',
-      'Mirar lo mismo y entender cosas distintas.',
-      'Discutir sobre una pieza durante el café de después.',
+      'En el Pal Norte descubrimos que el ruido también puede ser íntimo.',
+      'Miles de personas y aún así te seguía oyendo a ti.',
+      'Bailar mal, los dos, resultó ser la mejor forma de bailar bien.',
     ],
   },
 
@@ -41,10 +41,10 @@ export const copy = {
   quebec: {
     place: 'Québec · Canadá',
     lines: [
-      'Québec fue la primera vez que te vi en otro idioma.',
-      'Un francés con acento de río congelado.',
-      'Y aún así, seguías siendo tú,',
-      'pidiendo el café exactamente como en casa.',
+      'Québec fue nuestra primera aventura ya como nosotros.',
+      'El primer aeropuerto juntos, el primer mapa que arruinamos,',
+      'caminando en un castillo sin saber bien el camino —',
+      'descubriendo que perderse contigo era parte del plan.',
     ],
   },
 
@@ -55,7 +55,7 @@ export const copy = {
       'es de las cosas más serias que alguien ha hecho por mí.',
       'Atravesar océanos para ver una ciudad gris',
       'solo porque yo estaba en ella.',
-      'Aprendí algo esa semana que no sé explicar todavía:',
+      'Aprendí algo en ese tiempo que no sé explicar todavía:',
       'que el lugar no importa cuando la persona sí.',
     ],
   },
@@ -63,14 +63,13 @@ export const copy = {
   presente: {
     lines: [
       'Dos años.',
-      'Cinco ciudades.',
-      'Una sola decisión repetida muchas veces.',
+      'Trece ciudades.',
+      'El mismo sentimiento que crece.',
     ],
   },
 
   futuro: {
-    line: 'Y todavía nos faltan todas las primeras veces.',
-    credits: 'Hecho a mano por Acker · {{fecha}}',
+    line: 'Y todavía nos faltan muchas primeras veces.',
     // TODO: easter egg / mensaje oculto del capítulo 6
     secret: '',
   },
@@ -79,7 +78,7 @@ export const copy = {
 export const chapters = [
   { id: 0, slug: 'hero', label: 'Apertura', roman: 'I' },
   { id: 1, slug: 'vichy', label: 'Vichy', roman: 'II' },
-  { id: 2, slug: 'museos', label: 'Museos', roman: 'III' },
+  { id: 2, slug: 'norte', label: 'Norte', roman: 'III' },
   { id: 3, slug: 'mosaico', label: 'Cotidiano', roman: 'IV' },
   { id: 4, slug: 'travesias', label: 'Travesías', roman: 'V' },
   { id: 5, slug: 'presente', label: 'Presente', roman: 'VI' },

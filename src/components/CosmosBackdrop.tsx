@@ -1,37 +1,59 @@
 import { useEffect } from 'react';
 import { useSceneStore } from '../three/store';
 
-// Curva de color de texto: cream durante suspenso, ink durante la fase saturada,
-// warm-cream al final etéreo. Snap rápido alrededor del pico para evitar el
-// "gris intermedio" ilegible mientras se cruza la transición.
-function deriveFg(t: number): { fg: string; fgMuted: string } {
-  if (t < 0.26) {
-    return { fg: '#fbf4ee', fgMuted: 'rgba(245, 212, 211, 0.78)' };
+type FgState = {
+  fg: string;
+  fgMuted: string;
+  fgShadow: string;
+};
+
+const CREAM: FgState = {
+  fg: '#fbf4ee',
+  fgMuted: 'rgba(245, 212, 211, 0.82)',
+  fgShadow: 'rgba(0, 0, 0, 0.6)',
+};
+
+const INK: FgState = {
+  fg: '#3a2a24',
+  fgMuted: 'rgba(140, 80, 90, 0.92)',
+  fgShadow: 'rgba(0, 0, 0, 0.18)',
+};
+
+/**
+ * Color de texto en función del scroll global.
+ *
+ * El backdrop morphing es DARK casi todo el scroll (el bgGlow va de #07030f
+ * a #4a2030 en el burst, después regresa a #1a0c0c hacia el final). Solo
+ * durante el burst peak (~t=0.34) el fondo es realmente brillante.
+ *
+ * Por eso usamos CREAM por default y solo switcheamos a INK en la ventana
+ * estrecha del burst, con transiciones suaves a cada lado.
+ */
+function deriveFg(t: number): FgState {
+  // Ventanas: cream | trans | ink | trans | cream
+  const inkStart = 0.31;
+  const inkEnd = 0.38;
+  const transWidth = 0.04;
+
+  if (t < inkStart - transWidth) return CREAM;
+  if (t > inkEnd + transWidth) return CREAM;
+  if (t >= inkStart && t <= inkEnd) return INK;
+
+  if (t < inkStart) {
+    // Cream → Ink
+    const local = (t - (inkStart - transWidth)) / transWidth;
+    return interpolate(CREAM, INK, local);
   }
-  if (t < 0.36) {
-    const local = (t - 0.26) / 0.1;
-    const r = Math.round(lerp(251, 58, local));
-    const g = Math.round(lerp(244, 42, local));
-    const b = Math.round(lerp(238, 36, local));
-    return {
-      fg: `rgb(${r}, ${g}, ${b})`,
-      fgMuted: `rgba(${Math.round(lerp(245, 201, local))}, ${Math.round(
-        lerp(212, 123, local)
-      )}, ${Math.round(lerp(211, 132, local))}, 0.85)`,
-    };
-  }
-  if (t < 0.84) {
-    return { fg: '#3a2a24', fgMuted: 'rgba(201, 123, 132, 0.9)' };
-  }
-  const local = (t - 0.84) / 0.16;
-  const r = Math.round(lerp(58, 92, local));
-  const g = Math.round(lerp(42, 68, local));
-  const b = Math.round(lerp(36, 56, local));
+  // Ink → Cream
+  const local = (t - inkEnd) / transWidth;
+  return interpolate(INK, CREAM, local);
+}
+
+function interpolate(a: FgState, b: FgState, t: number): FgState {
   return {
-    fg: `rgb(${r}, ${g}, ${b})`,
-    fgMuted: `rgba(${Math.round(lerp(201, 232, local))}, ${Math.round(
-      lerp(123, 180, local)
-    )}, ${Math.round(lerp(132, 184, local))}, 0.85)`,
+    fg: lerpRgb(a.fg, b.fg, t),
+    fgMuted: lerpRgba(a.fgMuted, b.fgMuted, t),
+    fgShadow: lerpRgba(a.fgShadow, b.fgShadow, t),
   };
 }
 
@@ -39,13 +61,46 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-/**
- * Backdrop cósmico fijo: una sola capa que cubre el viewport y morfea
- * sus colores cada frame escribiendo CSS vars en :root.
- *
- * Renderiza un <div class="cosmos-backdrop"> con position: fixed para que
- * sea inmune a Lenis / scroll smooth y nunca aparezca un "seam" horizontal.
- */
+function lerpRgb(a: string, b: string, t: number): string {
+  const [ar, ag, ab] = parseRgb(a);
+  const [br, bg, bb] = parseRgb(b);
+  return `rgb(${Math.round(lerp(ar, br, t))}, ${Math.round(
+    lerp(ag, bg, t)
+  )}, ${Math.round(lerp(ab, bb, t))})`;
+}
+
+function lerpRgba(a: string, b: string, t: number): string {
+  const [ar, ag, ab, aa] = parseRgba(a);
+  const [br, bg, bb, ba] = parseRgba(b);
+  return `rgba(${Math.round(lerp(ar, br, t))}, ${Math.round(
+    lerp(ag, bg, t)
+  )}, ${Math.round(lerp(ab, bb, t))}, ${lerp(aa, ba, t).toFixed(3)})`;
+}
+
+function parseRgb(s: string): [number, number, number] {
+  if (s.startsWith('#')) {
+    const hex = s.slice(1);
+    return [
+      parseInt(hex.slice(0, 2), 16),
+      parseInt(hex.slice(2, 4), 16),
+      parseInt(hex.slice(4, 6), 16),
+    ];
+  }
+  const m = s.match(/rgba?\(([^)]+)\)/);
+  if (!m) return [0, 0, 0];
+  const parts = m[1].split(',').map((p) => parseFloat(p.trim()));
+  return [parts[0] ?? 0, parts[1] ?? 0, parts[2] ?? 0];
+}
+
+function parseRgba(s: string): [number, number, number, number] {
+  const [r, g, b] = parseRgb(s);
+  if (s.startsWith('#')) return [r, g, b, 1];
+  const m = s.match(/rgba?\(([^)]+)\)/);
+  if (!m) return [r, g, b, 1];
+  const parts = m[1].split(',').map((p) => parseFloat(p.trim()));
+  return [r, g, b, parts[3] ?? 1];
+}
+
 export function CosmosBackdrop() {
   useEffect(() => {
     let raf = 0;
@@ -59,9 +114,10 @@ export function CosmosBackdrop() {
       root.style.setProperty('--bg-c', palette.bgC);
       root.style.setProperty('--bg-glow', palette.bgGlow);
 
-      const { fg, fgMuted } = deriveFg(state.globalProgress);
+      const { fg, fgMuted, fgShadow } = deriveFg(state.globalProgress);
       root.style.setProperty('--story-fg', fg);
       root.style.setProperty('--story-fg-muted', fgMuted);
+      root.style.setProperty('--story-fg-shadow', fgShadow);
 
       raf = requestAnimationFrame(tick);
     };

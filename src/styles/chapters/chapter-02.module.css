@@ -1,0 +1,95 @@
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.85fr);
+  gap: var(--space-4);
+  align-items: center;
+  width: min(82rem, 94vw);
+  max-height: 92vh;
+  text-align: left;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 50ch;
+  min-width: 0;
+}
+
+.placeSecond {
+  margin-top: var(--space-3);
+}
+
+/* Stack de polaroids como cluster orgánico — posicionamiento absoluto
+   dentro de un contenedor de altura controlada para que SIEMPRE quepa
+   sin importar el viewport. Sizes en vh para escalar con altura. */
+.stack {
+  position: relative;
+  width: 100%;
+  height: 78vh;
+  max-height: 86vh;
+}
+
+/* Override del width inline del Polaroid3D para que escale con vh.
+   Specificity: .stack > figure (0,1,1). Cada clase de tile específica
+   añade un selector más para ganar specificity. */
+.stack > figure {
+  position: absolute;
+  width: clamp(130px, 17vh, 240px) !important;
+  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+}
+
+.stack > .polaroid0 {
+  top: 4%;
+  right: 4%;
+  width: clamp(130px, 17vh, 240px) !important;
+  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+}
+
+.stack > .polaroid1 {
+  top: 36%;
+  left: -4%;
+  width: clamp(150px, 19vh, 270px) !important;
+  height: calc(clamp(150px, 19vh, 270px) * 1.516) !important;
+}
+
+.stack > .polaroid2 {
+  bottom: 4%;
+  right: 18%;
+  width: clamp(130px, 17vh, 240px) !important;
+  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+}
+
+@media (max-width: 900px) {
+  .spread {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    text-align: center;
+    max-height: none;
+  }
+  .column {
+    margin: 0 auto;
+  }
+  /* En móvil/tablet portrait, el cluster se vuelve grid horizontal */
+  .stack {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+  .stack > figure,
+  .stack > .polaroid0,
+  .stack > .polaroid1,
+  .stack > .polaroid2 {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: clamp(140px, 28vw, 200px) !important;
+    height: calc(clamp(140px, 28vw, 200px) * 1.516) !important;
+  }
+}

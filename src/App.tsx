@@ -5,6 +5,7 @@ import { useLenis } from './hooks/useLenis';
 import { useReducedMotion } from './hooks/useReducedMotion';
 import { useGlobalScroll } from './hooks/useGlobalScroll';
 import { CosmosBackdrop } from './components/CosmosBackdrop';
+import { MusicPlayer } from './components/MusicPlayer';
 import { ProgressIndicator } from './components/ProgressIndicator';
 import { Chapter00Hero } from './chapters/Chapter00Hero';
 import { Chapter01Vichy } from './chapters/Chapter01Vichy';
@@ -36,6 +37,7 @@ function App() {
       </div>
 
       <ProgressIndicator />
+      <MusicPlayer />
 
       <main className="story">
         <Chapter00Hero />

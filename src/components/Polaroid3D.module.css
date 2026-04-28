@@ -1,0 +1,133 @@
+.mount {
+  position: relative;
+  display: block;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  transform-origin: center center;
+}
+
+.canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─────── Zoom modal (HTML, vía portal a body) ─────── */
+
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 4vh 4vw;
+  background: rgba(7, 3, 16, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: zoom-out;
+  animation: zoomOverlayIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.zoomFrame {
+  position: relative;
+  margin: 0;
+  background: #f5efe6;
+  padding: 2.2% 2.2% 7%;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.55),
+    0 6px 20px rgba(0, 0, 0, 0.35);
+  width: min(78vw, calc(78vh / 1.516));
+  cursor: default;
+  animation: zoomFrameIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 2px;
+}
+
+.zoomPhoto {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #1a0e0e;
+}
+
+.zoomPhoto img,
+.zoomPhoto video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.zoomCaption {
+  margin: 4% 0 0;
+  font-family: var(--font-hand);
+  font-size: clamp(1.4rem, 1rem + 1.6vw, 2.6rem);
+  font-weight: 600;
+  color: #2a1f1a;
+  text-align: center;
+  letter-spacing: 0.01em;
+  transform: rotate(-2deg);
+  line-height: 1;
+}
+
+.zoomClose {
+  position: fixed;
+  top: 2vh;
+  right: 2vw;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 239, 230, 0.3);
+  background: rgba(7, 3, 16, 0.6);
+  color: var(--cream-1);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+  transition: background 0.2s, transform 0.2s;
+  padding: 0;
+}
+
+.zoomClose:hover {
+  background: rgba(7, 3, 16, 0.85);
+  transform: scale(1.08);
+}
+
+@keyframes zoomOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+@keyframes zoomFrameIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

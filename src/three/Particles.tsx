@@ -17,6 +17,17 @@ type Props = {
   radius?: number;
 };
 
+/** Estallidos de partículas por capítulo. Cada midpoint del capítulo
+ *  dispara una gaussiana de uExplosion para que las partículas chispeen. */
+const EXPLOSION_PEAKS = [
+  { t: 0.18, mag: 0.45, width: 0.045 }, // vichy
+  { t: 0.34, mag: 1.0, width: 0.06 },   // norte (clímax)
+  { t: 0.49, mag: 0.65, width: 0.045 }, // mosaico
+  { t: 0.65, mag: 0.5, width: 0.05 },   // travesías
+  { t: 0.83, mag: 0.45, width: 0.045 }, // presente
+  { t: 0.95, mag: 0.4, width: 0.035 },  // futuro
+];
+
 export function Particles({ count = 1500, radius = 8 }: Props) {
   const ref = useRef<Points>(null);
   const { gl } = useThree();
@@ -72,8 +83,13 @@ export function Particles({ count = 1500, radius = 8 }: Props) {
     const palette = state.palette;
     const t = state.globalProgress;
 
-    // Pico de explosión: gaussiana estrecha centrada en t≈0.34
-    const explosionTarget = Math.exp(-Math.pow((t - 0.34) / 0.06, 2));
+    // Estallidos por capítulo: suma de gaussianas en cada midpoint.
+    let explosionTarget = 0;
+    for (let i = 0; i < EXPLOSION_PEAKS.length; i++) {
+      const p = EXPLOSION_PEAKS[i];
+      explosionTarget += p.mag * Math.exp(-Math.pow((t - p.t) / p.width, 2));
+    }
+    if (explosionTarget > 1) explosionTarget = 1;
     material.uniforms.uTime.value = clock.elapsedTime;
     material.uniforms.uColorA.value.lerp(palette.particleA, 0.08);
     material.uniforms.uColorB.value.lerp(palette.particleB, 0.08);

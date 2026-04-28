@@ -1,0 +1,149 @@
+.wrap {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  left: 20px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 239, 230, 0.18);
+  background: rgba(7, 3, 16, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--story-fg-muted, rgba(245, 212, 211, 0.85));
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+  font: inherit;
+}
+
+.btn:hover {
+  background: rgba(7, 3, 16, 0.78);
+  border-color: rgba(245, 239, 230, 0.32);
+  color: var(--story-fg, var(--cream-1));
+  transform: scale(1.06);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--rose-2);
+  outline-offset: 4px;
+}
+
+.btn.playing {
+  color: var(--rose-1);
+  border-color: rgba(232, 180, 184, 0.45);
+  background: rgba(74, 26, 50, 0.55);
+}
+
+/* Ondas concéntricas mientras suena: emiten desde el botón y se desvanecen. */
+.wave {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 180, 184, 0.45);
+  animation: musicWave 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.wave2 {
+  animation-delay: 1.2s;
+}
+
+@keyframes musicWave {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  80% {
+    opacity: 0.05;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+/* Hint flotante: "pícale ♪" en handwriting al lado del botón.
+   Aparece la primera vez que se carga el sitio, desaparece tras el
+   primer click. Animado con bounce sutil para llamar la atención sin
+   ser molesto. */
+.hint {
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--story-fg, var(--cream-1));
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 0 14px rgba(0, 0, 0, 0.5),
+    0 0 28px rgba(245, 212, 211, 0.35),
+    0 1px 18px rgba(255, 193, 92, 0.25);
+  animation: hintBounce 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: left center;
+}
+
+/* Mientras se ve el hint, el botón llama atención con un pulso suave. */
+.btn.beckoning {
+  animation: btnBeckon 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-color: rgba(245, 212, 211, 0.55);
+  box-shadow:
+    0 0 0 0 rgba(245, 212, 211, 0.45),
+    0 0 24px rgba(255, 193, 92, 0.25);
+}
+
+@keyframes hintBounce {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(4px);
+    opacity: 1;
+  }
+}
+
+@keyframes btnBeckon {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 0 rgba(245, 212, 211, 0.45),
+      0 0 24px rgba(255, 193, 92, 0.25);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 10px rgba(245, 212, 211, 0),
+      0 0 32px rgba(255, 193, 92, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    bottom: 14px;
+    left: 14px;
+    gap: 10px;
+  }
+  .btn {
+    width: 40px;
+    height: 40px;
+  }
+  .hint {
+    font-size: 1.15rem;
+  }
+}
