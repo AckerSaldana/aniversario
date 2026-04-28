@@ -13,12 +13,12 @@ const TILE_CONFIG: {
   className: string;
   caption: string;
 }[] = [
-  { rotate: -6, width: 230, className: 'tile0', caption: 'EscapeRoom' },
-  { rotate: 4, width: 210, className: 'tile1', caption: 'Quebec Beis' },
-  { rotate: -3, width: 245, className: 'tile2', caption: 'Sultanes' },
-  { rotate: 5, width: 220, className: 'tile3', caption: 'DaleMixx' },
-  { rotate: -2, width: 255, className: 'tile4', caption: 'Sea at Hull' },
-  { rotate: 3, width: 215, className: 'tile5', caption: 'SixFlags' },
+  { rotate: -6, width: 185, className: 'tile0', caption: 'EscapeRoom' },
+  { rotate: 4, width: 165, className: 'tile1', caption: 'Quebec Beis' },
+  { rotate: -3, width: 195, className: 'tile2', caption: 'Sultanes' },
+  { rotate: 5, width: 175, className: 'tile3', caption: 'DaleMixx' },
+  { rotate: -2, width: 200, className: 'tile4', caption: 'Sea at Hull' },
+  { rotate: 3, width: 170, className: 'tile5', caption: 'SixFlags' },
 ];
 
 export function Chapter03Mosaico() {

@@ -1,7 +1,7 @@
 .spread {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.85fr);
-  gap: var(--space-4);
+  gap: var(--space-3);
   align-items: center;
   width: min(82rem, 94vw);
   max-height: 92vh;
@@ -20,44 +20,41 @@
   margin-top: var(--space-3);
 }
 
-/* Stack de polaroids como cluster orgánico — posicionamiento absoluto
-   dentro de un contenedor de altura controlada para que SIEMPRE quepa
-   sin importar el viewport. Sizes en vh para escalar con altura. */
+/* Stack de polaroids en cluster orgánico. Altura conservadora en vh con
+   límite máximo en px para que en 1080p deje aire arriba/abajo. */
 .stack {
   position: relative;
   width: 100%;
-  height: 78vh;
-  max-height: 86vh;
+  height: clamp(380px, 62vh, 640px);
 }
 
-/* Override del width inline del Polaroid3D para que escale con vh.
-   Specificity: .stack > figure (0,1,1). Cada clase de tile específica
-   añade un selector más para ganar specificity. */
+/* Override del width inline del Polaroid3D — vmin para que escale uniforme
+   en cualquier resolución (1080p, 1440p, 4K). */
 .stack > figure {
   position: absolute;
-  width: clamp(130px, 17vh, 240px) !important;
-  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+  width: clamp(110px, 13vmin, 200px) !important;
+  height: calc(clamp(110px, 13vmin, 200px) * 1.516) !important;
 }
 
 .stack > .polaroid0 {
   top: 4%;
-  right: 4%;
-  width: clamp(130px, 17vh, 240px) !important;
-  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+  right: 6%;
+  width: clamp(110px, 13vmin, 200px) !important;
+  height: calc(clamp(110px, 13vmin, 200px) * 1.516) !important;
 }
 
 .stack > .polaroid1 {
-  top: 36%;
-  left: -4%;
-  width: clamp(150px, 19vh, 270px) !important;
-  height: calc(clamp(150px, 19vh, 270px) * 1.516) !important;
+  top: 38%;
+  left: -2%;
+  width: clamp(125px, 15vmin, 220px) !important;
+  height: calc(clamp(125px, 15vmin, 220px) * 1.516) !important;
 }
 
 .stack > .polaroid2 {
   bottom: 4%;
-  right: 18%;
-  width: clamp(130px, 17vh, 240px) !important;
-  height: calc(clamp(130px, 17vh, 240px) * 1.516) !important;
+  right: 22%;
+  width: clamp(110px, 13vmin, 200px) !important;
+  height: calc(clamp(110px, 13vmin, 200px) * 1.516) !important;
 }
 
 @media (max-width: 900px) {
@@ -70,7 +67,6 @@
   .column {
     margin: 0 auto;
   }
-  /* En móvil/tablet portrait, el cluster se vuelve grid horizontal */
   .stack {
     position: static;
     height: auto;

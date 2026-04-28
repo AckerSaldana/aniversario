@@ -1,11 +1,11 @@
 .frame {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: clamp(2rem, 4vh, 5rem);
   align-items: center;
   text-align: center;
-  width: min(60ch, 88vw);
-  max-height: 88vh;
+  width: min(58ch, 88vw);
+  max-height: 92vh;
   will-change: opacity, transform, filter;
 }
 
@@ -19,6 +19,6 @@
 
 @media (max-width: 768px) {
   .frame {
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 }

@@ -57,16 +57,16 @@ export function useChapterScroll({
           let opacity = 1;
           let blur = 0;
           let scale = 1;
-          if (p < 0.18 && !isFirst) {
-            const k = p / 0.18;
+          if (p < 0.14 && !isFirst) {
+            const k = p / 0.14;
             opacity = k;
-            blur = (1 - k) * 18;
-            scale = 1 + (1 - k) * 0.06;
-          } else if (p > 0.82) {
-            const k = (p - 0.82) / 0.18;
+            blur = (1 - k) * 10;
+            scale = 1 + (1 - k) * 0.03;
+          } else if (p > 0.86) {
+            const k = (p - 0.86) / 0.14;
             opacity = 1 - k;
-            blur = k * 18;
-            scale = 1 - k * 0.06;
+            blur = k * 10;
+            scale = 1 - k * 0.03;
           }
           content.style.opacity = String(opacity);
           content.style.filter = `blur(${blur.toFixed(2)}px) brightness(${(
