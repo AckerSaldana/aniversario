@@ -1,8 +1,17 @@
-/* Sin background propio: el escenario lo provee el body. */
 .section {
+  position: relative;
+  width: 100%;
+  /* altura inline en vh */
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: grid;
   place-items: center;
   overflow: hidden;
+  padding: var(--space-4) var(--space-3);
 }
 
 .inner {
@@ -10,10 +19,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   text-align: center;
-  width: min(80rem, 92vw);
-  padding: var(--space-3);
+  width: min(48rem, 90vw);
+  max-height: 86vh;
+  padding: var(--space-2);
   will-change: opacity, transform, filter;
 }
 
@@ -42,11 +52,11 @@
 .line {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: var(--step-3);
-  line-height: 1.12;
+  font-size: var(--step-2);
+  line-height: 1.18;
   letter-spacing: -0.005em;
   color: var(--story-fg, var(--cream-1));
-  max-width: 18ch;
+  max-width: 22ch;
   text-wrap: balance;
   text-shadow:
     0 1px 32px rgba(0, 0, 0, 0.4),
@@ -54,7 +64,7 @@
 }
 
 .scrollHint {
-  margin-top: var(--space-4);
+  margin-top: var(--space-3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,4 +110,13 @@
   50% { transform: scaleY(1); transform-origin: top; }
   51% { transform-origin: bottom; }
   100% { transform: scaleY(0.2); transform-origin: bottom; }
+}
+
+@media (max-width: 768px) {
+  .stickyStage {
+    padding: var(--space-3) var(--space-2);
+  }
+  .line {
+    font-size: var(--step-1);
+  }
 }

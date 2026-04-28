@@ -1,32 +1,28 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import {
   ExtrudeGeometry,
   MeshPhysicalMaterial,
   Shape,
-  type Group,
   type Mesh,
 } from 'three';
 import { useSceneStore } from './store';
 
-const OBJ_URL = '/models/grulla.obj';
-
-// Material protagonista: rose suave con clearcoat e iridescencia, transmission
-// ligera para que respire luz (especialmente bonito en fondo cream).
+// Material protagonista: rose suave con clearcoat, iridescencia y un poco de
+// transmisión para que respire luz contra el fondo cósmico.
 const material = new MeshPhysicalMaterial({
   color: '#e8b4b8',
   roughness: 0.22,
   metalness: 0.18,
   clearcoat: 1.0,
   clearcoatRoughness: 0.08,
-  iridescence: 0.85,
+  iridescence: 0.6,
   iridescenceIOR: 1.4,
   iridescenceThicknessRange: [120, 480],
   sheen: 0.6,
   sheenColor: '#e8c56b',
   sheenRoughness: 0.4,
-  transmission: 0.15,
+  transmission: 0.12,
   thickness: 0.6,
   ior: 1.45,
   attenuationColor: '#c97b84',
@@ -35,38 +31,66 @@ const material = new MeshPhysicalMaterial({
   emissiveIntensity: 0.05,
 });
 
-function createStarShape({
-  outerRadius = 1,
-  innerRadius = 0.42,
-  points = 5,
-} = {}) {
-  const shape = new Shape();
-  const total = points * 2;
-  for (let i = 0; i <= total; i++) {
-    const r = i % 2 === 0 ? outerRadius : innerRadius;
-    const a = (i / total) * Math.PI * 2 - Math.PI / 2;
-    const x = Math.cos(a) * r;
-    const y = Math.sin(a) * r;
-    if (i === 0) shape.moveTo(x, y);
-    else shape.lineTo(x, y);
-  }
-  shape.closePath();
-  return shape;
+/**
+ * Corazón geométrico simétrico con cusp inferior y dos lóbulos superiores.
+ * Construido con cuatro curvas Bézier cúbicas balanceadas y centrado para
+ * que la rotación quede en el medio visual.
+ */
+function createHeartShape() {
+  const s = new Shape();
+  const scale = 1;
+  const dip = 0.55;       // qué tan profundo es el valle entre los lóbulos
+  const lobeY = 0.95 * scale;
+  const lobeX = 1.0 * scale;
+  const tipY = -1.05 * scale;
+
+  // Empezamos en el cusp/punta inferior
+  s.moveTo(0, tipY);
+
+  // Bajada derecha → subida hacia el lóbulo derecho
+  s.bezierCurveTo(
+    0.55 * scale, -0.55 * scale,
+    1.05 * scale, -0.1 * scale,
+    lobeX, 0.4 * scale
+  );
+
+  // Lóbulo derecho → curva al centro (valle)
+  s.bezierCurveTo(
+    1.0 * scale, lobeY,
+    0.55 * scale, lobeY,
+    0, dip * scale
+  );
+
+  // Centro → lóbulo izquierdo
+  s.bezierCurveTo(
+    -0.55 * scale, lobeY,
+    -1.0 * scale, lobeY,
+    -lobeX, 0.4 * scale
+  );
+
+  // Lóbulo izquierdo → punta inferior
+  s.bezierCurveTo(
+    -1.05 * scale, -0.1 * scale,
+    -0.55 * scale, -0.55 * scale,
+    0, tipY
+  );
+
+  return s;
 }
 
-function StarGeometry() {
+function HeartGeometry() {
   const ref = useRef<Mesh>(null);
 
   const geometry = useMemo(() => {
-    const shape = createStarShape({ outerRadius: 1, innerRadius: 0.42, points: 5 });
+    const shape = createHeartShape();
     const geom = new ExtrudeGeometry(shape, {
-      depth: 0.28,
+      depth: 0.42,
       bevelEnabled: true,
-      bevelThickness: 0.1,
-      bevelSize: 0.08,
+      bevelThickness: 0.18,
+      bevelSize: 0.14,
       bevelOffset: 0,
-      bevelSegments: 6,
-      curveSegments: 16,
+      bevelSegments: 12,
+      curveSegments: 48,
     });
     geom.center();
     geom.computeVertexNormals();
@@ -79,67 +103,31 @@ function StarGeometry() {
     const state = useSceneStore.getState();
     const progress = state.globalProgress;
     const palette = state.palette;
-    const spinFactor = 0.18 + progress * 0.4;
+
+    // Heartbeat sutil: pulso doble por ciclo, más marcado durante el burst.
+    const beat = Math.sin(t * 1.6) * 0.5 + Math.sin(t * 1.6 + 0.4) * 0.5;
+    const beatScale = 1 + beat * (0.015 + progress * 0.025);
+
+    const spinFactor = 0.12 + progress * 0.28;
     ref.current.rotation.y = t * spinFactor;
-    ref.current.rotation.x = Math.sin(t * 0.4) * 0.18;
-    ref.current.rotation.z = Math.sin(t * 0.27) * 0.06;
-    ref.current.position.y = Math.sin(t * 0.55) * 0.1;
-    ref.current.scale.setScalar(0.6 + progress * 0.85);
+    ref.current.rotation.x = Math.sin(t * 0.4) * 0.14;
+    ref.current.rotation.z = Math.sin(t * 0.27) * 0.05;
+    ref.current.position.y = Math.sin(t * 0.55) * 0.08;
+
+    // En suspenso (progress < 0.05) el corazón es casi invisible y lejano.
+    const presence = Math.max(0, (progress - 0.05) / 0.95);
+    const baseScale = 0.25 + presence * 1.05;
+    ref.current.scale.setScalar(baseScale * beatScale);
+    ref.current.position.z = -2 + presence * 2;
     material.emissiveIntensity +=
-      (palette.starEmissive - material.emissiveIntensity) * 0.06;
+      (palette.starEmissive * presence - material.emissiveIntensity) * 0.06;
+    material.opacity = 0.15 + presence * 0.85;
+    material.transparent = true;
   });
 
   return <mesh ref={ref} geometry={geometry} material={material} />;
 }
 
-function StarOBJ() {
-  const obj = useLoader(OBJLoader, OBJ_URL);
-  const ref = useRef<Group>(null);
-
-  useEffect(() => {
-    obj.traverse((child) => {
-      const m = child as Mesh;
-      if (m.isMesh) {
-        m.material = material;
-        m.geometry.computeVertexNormals();
-      }
-    });
-  }, [obj]);
-
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const t = clock.elapsedTime;
-    const state = useSceneStore.getState();
-    const progress = state.globalProgress;
-    const palette = state.palette;
-    const spinFactor = 0.18 + progress * 0.4;
-    ref.current.rotation.y = t * spinFactor;
-    ref.current.position.y = Math.sin(t * 0.55) * 0.1;
-    ref.current.scale.setScalar(0.6 + progress * 0.85);
-    material.emissiveIntensity +=
-      (palette.starEmissive - material.emissiveIntensity) * 0.06;
-  });
-
-  return <primitive ref={ref} object={obj} />;
-}
-
 export function Star() {
-  const [hasModel, setHasModel] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(OBJ_URL, { method: 'HEAD' })
-      .then((r) => {
-        if (!r.ok) return false;
-        const ct = r.headers.get('content-type') ?? '';
-        return !ct.includes('text/html');
-      })
-      .then((ok) => !cancelled && setHasModel(ok))
-      .catch(() => !cancelled && setHasModel(false));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return hasModel ? <StarOBJ /> : <StarGeometry />;
+  return <HeartGeometry />;
 }

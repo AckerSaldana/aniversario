@@ -1,6 +1,13 @@
 html {
   background: var(--ink-cosmos);
   color-scheme: dark;
+
+  /* Defaults para los CSS vars del backdrop morphing.
+     CosmosBackdrop los sobreescribe en :root cada frame. */
+  --bg-a: rgba(26, 14, 42, 0.85);
+  --bg-b: rgba(58, 35, 71, 0.55);
+  --bg-c: rgba(74, 26, 50, 0.35);
+  --bg-glow: #07030f;
 }
 
 body {
@@ -9,10 +16,9 @@ body {
   font-weight: 300;
   letter-spacing: 0.005em;
   color: var(--fg);
-  /* Fondo: el CosmosBackdrop (z:-1) provee el morphing.
-     Aquí solo dejamos un negro cósmico de respaldo para el flash inicial
-     antes de hidratar React. */
-  background-color: var(--ink-cosmos);
+  /* body sin bg propio: el .cosmos-backdrop fijo provee el fondo cinemático,
+     y html tiene var(--ink-cosmos) como fallback antes de hidratar. */
+  background: transparent;
   overflow-x: hidden;
   cursor: default;
 }
@@ -55,37 +61,48 @@ body {
   overflow: hidden;
 }
 
-/* Canvas 3D persistente detrás del DOM. */
-.scene-canvas {
+/* Backdrop cósmico fijo: una sola capa con los gradientes morphing.
+   z-index 0 igual que el canvas, pero antes en DOM → pinta detrás. */
+.cosmos-backdrop {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   z-index: 0;
   pointer-events: none;
+  background-color: var(--bg-glow, #07030f);
+  background-image:
+    radial-gradient(ellipse 100% 80% at 22% 18%, var(--bg-a) 0%, transparent 65%),
+    radial-gradient(ellipse 95% 80% at 82% 78%, var(--bg-b) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, var(--bg-c) 0%, transparent 75%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Canvas 3D persistente sobre el backdrop. */
+.scene-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
 }
 
 main.story {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   isolation: isolate;
 }
 
-/* Cada capítulo es un escenario sin fondo propio: el body lo provee. */
+/* Cada capítulo es un escenario sin fondo propio: el body lo provee.
+   Los capítulos manejan su propio layout via stickyStage interno;
+   aquí solo nos aseguramos de que sean transparentes y no impongan
+   min-height ni grid centering que romperían el sticky. */
 main.story section[data-chapter] {
   position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: var(--space-4) var(--space-3);
+  width: 100%;
   background: transparent;
-}
-
-@media (max-width: 768px) {
-  main.story section[data-chapter] {
-    padding: var(--space-3) var(--space-2);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

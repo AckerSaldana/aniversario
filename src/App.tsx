@@ -27,7 +27,7 @@ function App() {
         <Canvas
           dpr={[1, 2]}
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-          camera={{ position: [0, 0, 6], fov: 35 }}
+          camera={{ position: [0, 0, 7.5], fov: 32 }}
         >
           <Suspense fallback={null}>
             <Scene postprocessing={!lowFi} />

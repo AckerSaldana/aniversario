@@ -1,25 +1,38 @@
 .section {
+  position: relative;
+  width: 100%;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: grid;
   place-items: center;
+  overflow: hidden;
+  padding: var(--space-4) var(--space-3);
 }
 
 .frame {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   text-align: center;
   width: min(40ch, 90vw);
+  max-height: 86vh;
+  will-change: opacity, transform, filter;
 }
 
 .line {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: var(--step-4);
-  line-height: 1.05;
+  font-size: var(--step-3);
+  line-height: 1.08;
   letter-spacing: -0.01em;
-  color: var(--ink-1);
+  color: var(--story-fg, var(--ink-1));
   text-wrap: balance;
+  text-shadow: 0 1px 32px rgba(0, 0, 0, 0.25);
 }
 
 .credits {
@@ -27,5 +40,14 @@
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--story-fg-muted, var(--ink-3));
+}
+
+@media (max-width: 768px) {
+  .stickyStage {
+    padding: var(--space-3) var(--space-2);
+  }
+  .line {
+    font-size: var(--step-2);
+  }
 }
