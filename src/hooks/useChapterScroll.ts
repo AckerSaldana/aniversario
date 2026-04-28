@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { RefObject } from 'react';
 import { useSceneStore } from '../three/store';
-import { chapters } from '../data/copy';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -40,8 +39,6 @@ export function useChapterScroll({
     () => {
       if (!ref.current || !enabled) return;
 
-      const meta = chapters.find((c) => c.id === chapterId);
-      const slug = meta?.slug ?? 'hero';
       const isFirst = chapterId === 0;
 
       const content =
@@ -59,8 +56,8 @@ export function useChapterScroll({
         pinSpacing: pin,
         scrub: 1.2,
         invalidateOnRefresh: true,
-        onEnter: () => useSceneStore.getState().setChapter(chapterId, slug),
-        onEnterBack: () => useSceneStore.getState().setChapter(chapterId, slug),
+        onEnter: () => useSceneStore.getState().setChapter(chapterId),
+        onEnterBack: () => useSceneStore.getState().setChapter(chapterId),
         onUpdate: (self) => {
           useSceneStore.getState().setChapterProgress(self.progress);
           onProgress?.(self.progress);

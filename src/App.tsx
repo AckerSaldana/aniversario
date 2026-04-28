@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import { Scene } from './three/Scene';
 import { useLenis } from './hooks/useLenis';
 import { useReducedMotion } from './hooks/useReducedMotion';
+import { useGlobalScroll } from './hooks/useGlobalScroll';
+import { CosmosBackdrop } from './components/CosmosBackdrop';
 import { ProgressIndicator } from './components/ProgressIndicator';
 import { Chapter00Hero } from './chapters/Chapter00Hero';
 import { Chapter01Vichy } from './chapters/Chapter01Vichy';
@@ -15,9 +17,12 @@ import { Chapter06Futuro } from './chapters/Chapter06Futuro';
 function App() {
   const { lowFi, reduced } = useReducedMotion();
   useLenis(!reduced);
+  useGlobalScroll(!reduced);
 
   return (
     <>
+      <CosmosBackdrop />
+
       <div className="scene-canvas">
         <Canvas
           dpr={[1, 2]}

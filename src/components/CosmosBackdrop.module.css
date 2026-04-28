@@ -1,0 +1,35 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+
+  --bg-a: rgba(26, 14, 42, 0.85);
+  --bg-b: rgba(58, 35, 71, 0.55);
+  --bg-c: rgba(74, 26, 50, 0.35);
+  --bg-glow: #07030f;
+
+  background-color: var(--bg-glow);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 22% 18%, var(--bg-a) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 70% at 82% 78%, var(--bg-b) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 50%, var(--bg-c) 0%, transparent 65%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-radial-gradient(
+      circle at 30% 40%,
+      transparent 0 2px,
+      rgba(255, 255, 255, 0.012) 2px 3px
+    );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}

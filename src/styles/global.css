@@ -1,6 +1,6 @@
 html {
-  background: var(--cream-1);
-  color-scheme: light;
+  background: var(--ink-cosmos);
+  color-scheme: dark;
 }
 
 body {
@@ -9,28 +9,10 @@ body {
   font-weight: 300;
   letter-spacing: 0.005em;
   color: var(--fg);
-  /* Fondo persistente: una sola atmósfera para toda la página.
-     background-attachment: fixed lo deja pinned mientras se scrollea. */
-  background-color: var(--cream-1);
-  background-image:
-    radial-gradient(
-      ellipse 80% 60% at 22% 18%,
-      rgba(232, 180, 184, 0.55) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 70% 60% at 82% 78%,
-      rgba(232, 197, 107, 0.4) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse 60% 50% at 50% 50%,
-      rgba(245, 212, 211, 0.3) 0%,
-      transparent 60%
-    );
-  background-attachment: fixed;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  /* Fondo: el CosmosBackdrop (z:-1) provee el morphing.
+     Aquí solo dejamos un negro cósmico de respaldo para el flash inicial
+     antes de hidratar React. */
+  background-color: var(--ink-cosmos);
   overflow-x: hidden;
   cursor: default;
 }

@@ -52,31 +52,41 @@ export function Particles({ count = 1500, radius = 8 }: Props) {
         fragmentShader,
         transparent: true,
         depthWrite: false,
-        // En fondo claro, additive lava todo a blanco. Normal con alpha
-        // controlado deja las partículas como motas de polvo coloreado.
         blending: NormalBlending,
         uniforms: {
           uTime: { value: 0 },
           uPixelRatio: { value: Math.min(gl.getPixelRatio(), 2) },
-          uSize: { value: 80 },
-          uIntensity: { value: 1 },
-          uColorA: { value: new Color('#e8b4b8') },
-          uColorB: { value: new Color('#e8c56b') },
+          uSize: { value: 90 },
+          uIntensity: { value: 0.18 },
+          uExplosion: { value: 0 },
+          uColorA: { value: new Color('#1a0e2a') },
+          uColorB: { value: new Color('#3a2347') },
+          uColorC: { value: new Color('#6a4a8a') },
         },
       }),
     [gl]
   );
 
   useFrame(({ clock }) => {
-    const palette = useSceneStore.getState().palette;
+    const state = useSceneStore.getState();
+    const palette = state.palette;
+    const t = state.globalProgress;
+
+    // Pico de explosión: gaussiana estrecha centrada en t≈0.34
+    const explosionTarget = Math.exp(-Math.pow((t - 0.34) / 0.06, 2));
     material.uniforms.uTime.value = clock.elapsedTime;
-    material.uniforms.uColorA.value.lerp(palette.particleA, 0.05);
-    material.uniforms.uColorB.value.lerp(palette.particleB, 0.05);
+    material.uniforms.uColorA.value.lerp(palette.particleA, 0.08);
+    material.uniforms.uColorB.value.lerp(palette.particleB, 0.08);
+    material.uniforms.uColorC.value.lerp(palette.particleC, 0.08);
     material.uniforms.uIntensity.value +=
-      (palette.intensity - material.uniforms.uIntensity.value) * 0.05;
+      (palette.intensity - material.uniforms.uIntensity.value) * 0.06;
+    material.uniforms.uExplosion.value +=
+      (explosionTarget - material.uniforms.uExplosion.value) * 0.18;
 
     if (ref.current) {
-      ref.current.rotation.y = clock.elapsedTime * 0.02;
+      // Spin más rápido durante el pico — sensación de remolino
+      const spin = 0.02 + material.uniforms.uExplosion.value * 0.1;
+      ref.current.rotation.y += spin * 0.016;
     }
   });
 

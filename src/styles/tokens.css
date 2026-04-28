@@ -17,6 +17,16 @@
   --dorado-2: #c9a961;
   --dorado-3: #9c7d3a;
 
+  /* Suspense / cosmos para la apertura oscura */
+  --ink-cosmos: #07030f;
+  --violet-deep: #1a0e2a;
+  --violet-mid:  #3a2347;
+  --burgundy:    #4a1a32;
+
+  /* Picos de la explosión de color */
+  --coral-burst: #ff6b8a;
+  --gold-burst:  #ffc15c;
+
   /* tinta cálida en lugar de negro puro */
   --ink-1: #3a2a24;
   --ink-2: #5c4438;

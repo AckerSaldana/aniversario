@@ -16,16 +16,18 @@
   position: relative;
   width: 1px;
   height: 60vh;
-  background: rgba(58, 42, 36, 0.12);
+  background: var(--story-fg-muted, rgba(245, 212, 211, 0.18));
+  opacity: 0.32;
   overflow: hidden;
 }
 
 .fill {
   position: absolute;
   inset: 0;
-  background: var(--rose-3);
+  background: var(--story-fg, var(--rose-3));
   transform-origin: top;
   will-change: transform;
+  opacity: 0.85;
 }
 
 .list {
@@ -45,12 +47,14 @@
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(58, 42, 36, 0.4);
-  transition: color 0.4s var(--ease-out-quart);
+  color: var(--story-fg-muted, rgba(245, 212, 211, 0.4));
+  opacity: 0.55;
+  transition: color 0.4s var(--ease-out-quart), opacity 0.4s var(--ease-out-quart);
 }
 
 .item.active {
-  color: var(--rose-3);
+  color: var(--story-fg, var(--rose-3));
+  opacity: 1;
 }
 
 .roman {

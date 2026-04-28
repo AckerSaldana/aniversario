@@ -31,6 +31,8 @@ const material = new MeshPhysicalMaterial({
   ior: 1.45,
   attenuationColor: '#c97b84',
   attenuationDistance: 4,
+  emissive: '#ffc15c',
+  emissiveIntensity: 0.05,
 });
 
 function createStarShape({
@@ -74,12 +76,17 @@ function StarGeometry() {
   useFrame(({ clock }) => {
     if (!ref.current) return;
     const t = clock.elapsedTime;
-    const progress = useSceneStore.getState().globalProgress;
-    ref.current.rotation.y = t * 0.18;
+    const state = useSceneStore.getState();
+    const progress = state.globalProgress;
+    const palette = state.palette;
+    const spinFactor = 0.18 + progress * 0.4;
+    ref.current.rotation.y = t * spinFactor;
     ref.current.rotation.x = Math.sin(t * 0.4) * 0.18;
     ref.current.rotation.z = Math.sin(t * 0.27) * 0.06;
     ref.current.position.y = Math.sin(t * 0.55) * 0.1;
-    ref.current.scale.setScalar(0.85 + progress * 0.55);
+    ref.current.scale.setScalar(0.6 + progress * 0.85);
+    material.emissiveIntensity +=
+      (palette.starEmissive - material.emissiveIntensity) * 0.06;
   });
 
   return <mesh ref={ref} geometry={geometry} material={material} />;
@@ -102,10 +109,15 @@ function StarOBJ() {
   useFrame(({ clock }) => {
     if (!ref.current) return;
     const t = clock.elapsedTime;
-    const progress = useSceneStore.getState().globalProgress;
-    ref.current.rotation.y = t * 0.18;
+    const state = useSceneStore.getState();
+    const progress = state.globalProgress;
+    const palette = state.palette;
+    const spinFactor = 0.18 + progress * 0.4;
+    ref.current.rotation.y = t * spinFactor;
     ref.current.position.y = Math.sin(t * 0.55) * 0.1;
-    ref.current.scale.setScalar(0.85 + progress * 0.55);
+    ref.current.scale.setScalar(0.6 + progress * 0.85);
+    material.emissiveIntensity +=
+      (palette.starEmissive - material.emissiveIntensity) * 0.06;
   });
 
   return <primitive ref={ref} object={obj} />;
