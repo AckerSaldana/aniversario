@@ -1,0 +1,88 @@
+.indicator {
+  position: fixed;
+  top: 50%;
+  right: var(--space-3);
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-feature-settings: 'lnum';
+}
+
+.track {
+  position: relative;
+  width: 1px;
+  height: 60vh;
+  background: rgba(58, 42, 36, 0.12);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--rose-3);
+  transform-origin: top;
+  will-change: transform;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 60vh;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(58, 42, 36, 0.4);
+  transition: color 0.4s var(--ease-out-quart);
+}
+
+.item.active {
+  color: var(--rose-3);
+}
+
+.roman {
+  font-size: 0.85rem;
+  font-style: italic;
+  min-width: 1.5em;
+  text-align: right;
+}
+
+.label {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.4s, transform 0.4s var(--ease-out-quart);
+  font-size: 0.65rem;
+}
+
+.item.active .label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+  .indicator {
+    right: var(--space-1);
+  }
+
+  .label {
+    display: none;
+  }
+
+  .track,
+  .list {
+    height: 40vh;
+  }
+}

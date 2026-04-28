@@ -1,0 +1,48 @@
+.section {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.frame {
+  width: min(60ch, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-inline: auto;
+}
+
+.place {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.7rem;
+  color: var(--rose-3);
+  opacity: 0.85;
+}
+
+.body {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-2);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--ink-1);
+}
+
+.bodyLg {
+  font-size: var(--step-3);
+}
+
+.bodySm {
+  font-size: var(--step-1);
+}
+
+.line {
+  display: block;
+}
+
+.center {
+  text-align: center;
+  margin-inline: auto;
+}

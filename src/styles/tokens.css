@@ -1,0 +1,53 @@
+:root {
+  /* paleta del amor: cremas, rose, coral, dorado, café cálido como tinta */
+  --cream-1: #fbf4ee;     /* fondo principal, blush casi blanco */
+  --cream-2: #f5ebe0;     /* superficies un tono más cálido */
+  --cream-3: #ecdfd0;     /* divisores / acentos suaves */
+
+  --rose-1: #f5d4d3;      /* rose pálido, casi pétalo */
+  --rose-2: #e8b4b8;      /* dusty pink */
+  --rose-3: #c97b84;      /* deep rose */
+  --rose-4: #8b5a60;      /* rosewood */
+
+  --coral-1: #f0c4b4;
+  --coral-2: #e0a899;
+  --coral-3: #c98271;
+
+  --dorado-1: #e8c56b;
+  --dorado-2: #c9a961;
+  --dorado-3: #9c7d3a;
+
+  /* tinta cálida en lugar de negro puro */
+  --ink-1: #3a2a24;
+  --ink-2: #5c4438;
+  --ink-3: rgba(58, 42, 36, 0.55);
+
+  --bg: var(--cream-1);
+  --fg: var(--ink-1);
+  --muted: var(--ink-3);
+  --accent: var(--rose-3);
+  --accent-warm: var(--coral-3);
+  --gold: var(--dorado-2);
+
+  /* tipografía */
+  --font-display: 'chloe', 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+
+  --step--1: clamp(0.875rem, 0.85rem + 0.15vw, 1rem);
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --step-2: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  --step-3: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
+  --step-4: clamp(3.5rem, 2.2rem + 6vw, 7rem);
+  --step-5: clamp(4rem, 2.4rem + 8vw, 10rem);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+  --space-4: 4rem;
+  --space-5: 8rem;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}

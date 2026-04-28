@@ -1,0 +1,83 @@
+/* Sin background propio: el escenario lo provee el body. */
+.section {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  text-align: center;
+  width: min(80rem, 92vw);
+  padding: var(--space-3);
+  will-change: opacity, transform, filter;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rose-3);
+  box-shadow:
+    0 0 0 8px rgba(201, 123, 132, 0.12),
+    0 0 32px var(--rose-3);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+
+.kicker {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 0.7rem;
+  color: var(--rose-4);
+  opacity: 0.85;
+}
+
+.line {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-3);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  color: var(--ink-1);
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.scrollHint {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.scrollHint em {
+  display: block;
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, var(--rose-3), transparent);
+  animation: scrollHint 2.2s ease-in-out infinite;
+  transform-origin: top;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 8px rgba(201, 123, 132, 0.1), 0 0 32px var(--rose-3); }
+  50% { transform: scale(1.5); opacity: 0.75; box-shadow: 0 0 0 14px rgba(201, 123, 132, 0.05), 0 0 44px var(--rose-3); }
+}
+
+@keyframes scrollHint {
+  0% { transform: scaleY(0.2); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0.2); transform-origin: bottom; }
+}
